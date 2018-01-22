@@ -1,7 +1,6 @@
 #calculator {
-    width: 360px;
+    width: 280px;
     display: block;
-    cursor: pointer;
     text-decoration: none;
     text-align: center;
     border-radius: 10px;
@@ -10,9 +9,7 @@
 
 div {
     background-color: lightgray;
-    width: 300px;
-    padding: 20px;
-    margin: 3px;   
+    padding: 5px;
 }
 
 .display {
@@ -20,6 +17,7 @@ div {
     margin:auto;
     background-color:white;
     margin-bottom: 5px;
+    margin-top: 5px;
     text-align: right;
     border-width: 6px;
     font-size: 40px;
@@ -31,6 +29,9 @@ div {
 button {
     font-size: x-large;
     border-radius: 5px;
+    height: 60px;
+    width: 60px;
+    cursor: pointer;
 }
 
 .digit {
