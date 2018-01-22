@@ -1,16 +1,10 @@
-li {
-    font-size: 24px;
-    font-weight: bold;
-    color: black;
-}
-
-a {
-    color: green;
+#calculator {
+    width: 360px;
+    display: block;
+    cursor: pointer;
     text-decoration: none;
-}
-
-a:hover {
-    background-color: darkorange;
+    text-align: center;
+    border-radius: 10px;
     color: black;
 }
 
@@ -18,57 +12,35 @@ div {
     background-color: lightgray;
     width: 300px;
     padding: 20px;
-    margin: 3px;
-    border-width: 6px;
-    border-style: solid;
-    border-color: darkgray;
+    margin: 3px;   
 }
 
 .display {
-    color:blue;
-    font-size:28px;
-    font-family:sans-serif;
-    font-weight:bold;
+    height: 50px;
+    margin:auto;
+    background-color:white;
+    margin-bottom: 5px;
     text-align: right;
-}
-
-.row {
-    width: 400px;
-    padding: 5px;
-    margin: 1px;
-    border-width: 0px;
-    background-color: lightgray;
-}
-
-.digit {
-
-}
-
-.operator {
-
-}
-
-label {
-    font-size: large;
-    font-family: sans-serif;
-    width: 125px;
-    display: inline-block;
-}
-
-
-input {
-    font-size: large;
+    border-width: 6px;
+    font-size: 40px;
+    font-family:sans-serif;   
+    border-style: solid;
+    border-color: darkgray; 
 }
 
 button {
     font-size: x-large;
+    border-radius: 5px;
+}
+
+.digit {
     background-color: lightblue;
 }
 
-input:focus {
-    background-color: pink;
+.operator {
+    background-color: orange;
 }
 
-button:focus {
+button:active {
     background-color: pink;
 }
