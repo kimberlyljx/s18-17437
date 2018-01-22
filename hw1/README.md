@@ -22,6 +22,7 @@ The following **optional** features are implemented:
 ## Requirements
 
 Your submission must also follow these requirements:
+
 ● You must have some design and general theme used throughout your page using CSS and
 HTML. (I.e., your UI should look consistent in terms of layout, colors, etc.)
 
