@@ -34,14 +34,23 @@ button {
     cursor: pointer;
 }
 
+button:hover {
+    background-color: pink;
+}
+
+#zero {
+    width: 120px;
+    background-color: lightblue;
+}
+
+#zero:hover {
+    background-color: pink;
+}
+
 .digit {
     background-color: lightblue;
 }
 
 .operator {
     background-color: orange;
-}
-
-button:hover {
-    background-color: pink;
 }
