@@ -19,6 +19,22 @@ is zero.
 
 The following **optional** features are implemented:
 
+## Requirements
+
+Your submission must also follow these requirements:
+● You must have some design and general theme used throughout your page using CSS and
+HTML. (I.e., your UI should look consistent in terms of layout, colors, etc.)
+
+● You must submit one HTML file called calculator.html.
+
+● The CSS must be separated out into (one or more) static file(s).
+
+● You may not use images in your calculator.
+
+● You must write the CSS and HTML yourself. You may not include packages from other sources
+(such as Bootstrap, for example). You may not use JavaScript for this homework assignment.
+
+● Cite all external resources used and any additional notes you would like to convey to your grader in the README.md file.
 
 ## Screenshot
 
