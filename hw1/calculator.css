@@ -41,6 +41,6 @@ button {
     background-color: orange;
 }
 
-button:active {
+button:hover {
     background-color: pink;
 }

@@ -15,7 +15,7 @@ The following **required** functionality is completed:
 * [X] Your calculator should display a single integer value that
 the user may not directly edit. For this homework, the value
 is zero.
-* [] When the user hovers over a button, its color must change.
+* [X] When the user hovers over a button, its color must change.
 
 The following **optional** features are implemented:
 
