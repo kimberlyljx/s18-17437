@@ -52,7 +52,7 @@ incremental development with Git commit (and commit messages).
 usage of HTML and CSS.
 
 ## References
-
+- [Shadows](https://www.w3schools.com/css/css3_shadows.asp)
 - [Colors](https://www.w3schools.com/cssref/css_colors.asp)
 - [Template README](https://raw.githubusercontent.com/kimberlyljx/Twitter/master/README.md) - Used old README as template
 
