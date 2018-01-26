@@ -73,7 +73,12 @@ function evaluate() {
             prevValue = prevValue - newValue;
             break;
         case OpTypes.DIVIDE:
-            prevValue = Math.floor(prevValue / newValue);
+            if (newValue == 0) {
+                alert("Cannot divide by Zero");
+                resetState();
+            } else {
+                prevValue = Math.floor(prevValue / newValue);
+            }
             break;
         case OpTypes.TIMES:
             prevValue = newValue * prevValue;
