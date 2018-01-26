@@ -27,24 +27,49 @@ function digitPress(digit) {
     lastWasOp = false;
 }
 
+function isValidOp(operator) {
+    switch (operator) {
+        case OpTypes.PLUS:
+            return true;
+            break;
+        case OpTypes.MINUS:
+            return true;
+            break;
+        case OpTypes.DIVIDE:
+            return true;
+            break;
+        case OpTypes.TIMES:
+            return true;
+            break;
+        case OpTypes.EQUALS:
+            return true;
+            break;
+        default:
+            return false;
+            break;
+    }
+}
+
+function updatePrevOp(newOp) {
+    if (isValidOp(newOp)) {
+        prevOp = newOp;
+    }
+    lastWasOp = true;
+}
+
 function evaluate() {
     switch (prevOp) {
         case OpTypes.PLUS:
             prevValue = newValue + prevValue;
             break;
-
         case OpTypes.MINUS:
             prevValue = prevValue - newValue;
             break;
-
         case OpTypes.DIVIDE:
-            prevValue = prevValue / newValue;
+            prevValue = Math.round(prevValue / newValue);
             break;
-
         case OpTypes.TIMES:
             prevValue = newValue * prevValue;
-            break;
-        case OpTypes.EQUALS:
             break;
         default:
             break;
@@ -52,9 +77,20 @@ function evaluate() {
 }
 
 function operatorPress(operator) {
+    if (lastWasOp) {
+        updatePrevOp(operator);
+        return;
+    }
     evaluate();
     updateDisplay(prevValue);
     prevOp = operator;
     newValue = 0;
     lastWasOp = true;
+
+    if (operator == OpTypes.EQUALS) {
+        newValue = 0;
+        prevValue = 0;
+        prevOp = OpTypes.PLUS;
+        lastWasOp = false;
+    }
 }
