@@ -12,6 +12,13 @@ var prevValue = 0;
 var prevOp = OpTypes.PLUS;
 var lastWasOp = false;
 
+function resetState() {
+    newValue = 0;
+    prevValue = 0;
+    prevOp = OpTypes.PLUS;
+    lastWasOp = false;
+}
+
 function updateDisplay(value) {
     var display   = document.getElementById("display");
     display.innerHTML = value;
@@ -66,7 +73,7 @@ function evaluate() {
             prevValue = prevValue - newValue;
             break;
         case OpTypes.DIVIDE:
-            prevValue = Math.round(prevValue / newValue);
+            prevValue = Math.floor(prevValue / newValue);
             break;
         case OpTypes.TIMES:
             prevValue = newValue * prevValue;
@@ -88,9 +95,6 @@ function operatorPress(operator) {
     lastWasOp = true;
 
     if (operator == OpTypes.EQUALS) {
-        newValue = 0;
-        prevValue = 0;
-        prevOp = OpTypes.PLUS;
-        lastWasOp = false;
+        resetState();
     }
 }
