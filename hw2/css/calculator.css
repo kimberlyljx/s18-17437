@@ -12,7 +12,7 @@ div {
     padding: 5px;
 }
 
-.display {
+#display {
     height: 50px;
     margin:auto;
     border-radius: 5px;
