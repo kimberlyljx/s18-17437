@@ -35,6 +35,17 @@ store any data between web requests. To meet this requirement your server will n
 
 ● You must do the computations Python on the server, not in JavaScript in the browser
 
+● Refresh in browser result in calculator reset
+
+● Provide error messages instead of Django exception error pages.
+
+● You press a button on the browser, which sends a request to the server. Then, the server sends back a response, which is displayed on your browser. 
+
+Page is reloaded after each click
+
+404 is not regarded as a crash. It is a valid error message for nonexistent pages.
+
+You should use form and hidden fields.
 
 ## Git Ignore 
 
