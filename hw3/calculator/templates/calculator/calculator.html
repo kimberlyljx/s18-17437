@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Homework 3: Calculator</title>
+        <link rel="stylesheet" href="static/calculator/calculator.css">
+    </head>
+
+    <body> 
+        <p><font face="verdana">{{errors}}</font></p>
+
+        <div id="calculator">
+            <div id="display">{{display}}</div>
+            
+            <form method="POST">
+                <input type="hidden" name="display" value="{{display}}">
+                <input type="hidden" name="new_value" value="{{new_value}}">
+                <input type="hidden" name="prev_value"  value="{{prev_value}}">
+                <input type="hidden" name="prev_op" value="{{prev_op}}">
+                <input type="hidden" name="last_was_op"  value="{{last_was_op}}">
+
+                <div>
+                    <button class="digit" type="submit" name="digit" value="7">7</button>
+                    <button class="digit" type="submit" name="digit" value="8">8</button>
+                    <button class="digit" type="submit" name="digit" value="9">9</button>
+                    <button class="operator" type="submit" name="operator" value="/">&divide;</button>
+                </div>
+        
+                <div>
+                    <button class="digit" type="submit" name="digit" value="4">4</button>
+                    <button class="digit" type="submit" name="digit" value="5">5</button>
+                    <button class="digit" type="submit" name="digit" value="6">6</button>
+                    <button class="operator" type="submit" name="operator" value="*">&times;</button>
+                </div>
+
+                <div>
+                    <button class="digit" type="submit" name="digit" value="1">1</button>
+                    <button class="digit" type="submit" name="digit" value="2">2</button>
+                    <button class="digit" type="submit" name="digit" value="3">3</button>
+                    <button class="operator" type="submit" name="operator" value="+">&plus;</button>
+                </div>
+
+                <div>
+                    <button id="zero" type="submit" name="digit" value="0">0</button>
+                    <button class="operator" type="submit" name="operator" value="=">&equals;</button>
+                    <button class="operator" type="submit" name="operator" value="-">&minus;</button>
+                </div>
+                {% csrf_token %} 
+            </form>
+        </div>
+    
+    </body>
+</html>
