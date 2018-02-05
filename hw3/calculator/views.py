@@ -54,10 +54,8 @@ def evaluate(request, context):
         elif (request.POST['prev_op'] == '/' and new_value != 0):
             context['prev_value'] = str(int(math.floor(prev_value / new_value)))
         else:
-            reset_context(context)
             res = False
     else:
-        reset_context(context)
         res = False
     return res
 
@@ -88,6 +86,7 @@ def home_page(request):
 
     if not attrs_exist(request):
         reset_context(context)
+        context['errors'] = "Missing request parameters"
         return render(request, 'calculator/calculator.html', context)
 
     if 'digit' in request.POST:
@@ -104,6 +103,7 @@ def home_page(request):
             return render(request, 'calculator/calculator.html', context)
         except:
             reset_context(context)
+            context['errors'] = "Invalid digit"
             return render(request, 'calculator/calculator.html', context)
         
     if 'operator' in request.POST and is_valid_op(request.POST['operator']):
@@ -128,10 +128,10 @@ def home_page(request):
                         return render(request, 'calculator/calculator.html', context)
                     return render(request, 'calculator/calculator.html', context)                    
                 else:
-                    print "failed eval"
+                    reset_context(context)
+                    context['errors']  = 'Invalid evaluation'                   
                     return render(request, 'calculator/calculator.html', context)
         except:
-            print "hit except"
             reset_context(context)
             return render(request, 'calculator/calculator.html', context)
 
