@@ -9,6 +9,7 @@ INT_MAX = 1000000
 INT_MIN = -1000000
 
 def reset_context(context):
+    print "resetting context"
     context['new_value'] = str(0)
     context['prev_value'] = str(0)
     context['prev_op'] = '+'
@@ -28,29 +29,30 @@ def is_valid_digit(digit_str):
     except:
         return False
 
-def is_valid_eval(context):
-    if (context['prev_op'] not in request.POST or
-        context['new_value'] not in request.POST or
-        context['prev_value'] not in request.POST):
+def is_valid_eval(request):
+    if ('prev_op' not in request.POST or
+        'new_value' not in request.POST or
+        'prev_value' not in request.POST):
         return False
     else:
-        return (is_valid_op(context['prev_op']) and 
-                is_valid_digit(context['prev_value']) and
-                is_valid_digit(context['new_value']))
+        return (is_valid_op(request.POST['prev_op']) and 
+                is_valid_digit(request.POST['prev_value']) and
+                is_valid_digit(request.POST['new_value']))
 
-def evaluate(context):
+def evaluate(request, context):
     res = True
-    if (is_valid_eval(context)):
-        prev_value = int(context['prev_value'])
-        new_value = int(context['new_value'])
-        if (context['prev_op'] == '+'):
-            prev_value = new_value + prev_value;
-        elif (context['prev_op'] == '-'):
-            prev_value = prev_value - new_value;
-        elif (context['prev_op'] == '*'):
-            prev_value = prev_value * new_value;
-        elif (context['prev_op'] == '/' and new_value != 0):
-            prev_value = Math.floor(prev_value / new_value)
+    if (is_valid_eval(request)):
+
+        prev_value = int(request.POST['prev_value'])
+        new_value = int(request.POST['new_value'])
+        if (request.POST['prev_op'] == '+'):
+            context['prev_value'] = str(new_value + prev_value)
+        elif (request.POST['prev_op'] == '-'):
+            context['prev_value'] = str(prev_value - new_value)
+        elif (request.POST['prev_op'] == '*'):
+            context['prev_value'] = str(prev_value * new_value)
+        elif (request.POST['prev_op'] == '/' and new_value != 0):
+            context['prev_value'] = str(Math.floor(prev_value / new_value))
         else:
             reset_context(context)
             res = False
@@ -58,6 +60,14 @@ def evaluate(context):
         reset_context(context)
         res = False
     return res
+
+def str_to_bool(s):
+    if s == 'True':
+        return True
+    elif s == 'False':
+        return False
+    else:
+        raise ValueError # evil ValueError that doesn't tell you what the wrong value was
 
 # Create your views here.
 def home_page(request):
@@ -70,51 +80,58 @@ def home_page(request):
     context = {}
 
     if 'reset' in request.POST:
-        print("hit")
-
         reset_context(context)
         return render(request, 'calculator/calculator.html', context)
     
     if 'digit' in request.POST:
-        print("digit")
         digit = 0
         try:
             digit = int(request.POST['digit'])
             new_value = int(request.POST['new_value'])
+            context['prev_value'] = request.POST['prev_value']
             new_value = new_value * 10 + digit
             context['new_value'] = str(new_value)
             context['display'] = str(new_value)
-            context['last_was_op'] = str(False)            
+            context['last_was_op'] = str(False)   
+            context['prev_op'] = request.POST['prev_op']         
             return render(request, 'calculator/calculator.html', context)
         except:
             reset_context(context)
             return render(request, 'calculator/calculator.html', context)
         
-    if 'operator' in request.POST and is_valid_op(context['operator']):
-        print("operator")
-
+    if 'operator' in request.POST and is_valid_op(request.POST['operator']):
         try:
-            if (bool(context['last_was_op'])):
-                context['prev_op'] = context['operator']
+            if (str_to_bool(request.POST['last_was_op'])):
+                print "last_was_op"
+                context['display'] = request.POST['display']
+                context['last_was_op'] = str(True)
+                context['new_value'] = request.POST['new_value']
+                context['prev_value'] = request.POST['prev_value']
+                context['prev_op'] = request.POST['operator']
                 return render(request, 'calculator/calculator.html', context)
             else:
-                if (evaluate(context)):
-                    context['display'] = context['prev_value']
-                    context['prev_op'] = context['operator']
+                print 'last was not op'
+                if (evaluate(request, context)):
+                    res = context['prev_value']
+                    print "evaluated" + res
+                    context['display'] = str(res)
+                    context['prev_op'] = request.POST['operator']
                     context['new_value'] = str(0)
                     context['last_was_op'] = str(True)
-                    if (context['operator'] == '='):
+                    if (request.POST['operator'] == '='):
                         reset_context();
-                        context['display'] = context['prev_value']
+                        context['display'] = res
                         return render(request, 'calculator/calculator.html', context)
+                    return render(request, 'calculator/calculator.html', context)                    
                 else:
+                    print "failed eval"
                     return render(request, 'calculator/calculator.html', context)
         except:
+            print "hit except"
             reset_context(context)
             return render(request, 'calculator/calculator.html', context)
 
     print("reset")
-
     reset_context(context)
     return render(request, 'calculator/calculator.html', context)
 
