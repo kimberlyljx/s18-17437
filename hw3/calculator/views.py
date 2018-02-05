@@ -9,7 +9,6 @@ INT_MAX = 1000000
 INT_MIN = -1000000
 
 def reset_context(context):
-    print "resetting context"
     context['new_value'] = str(0)
     context['prev_value'] = str(0)
     context['prev_op'] = '+'
@@ -44,7 +43,6 @@ def evaluate(request, context):
     if (is_valid_eval(request)):
         prev_value = int(request.POST['prev_value'])
         new_value = int(request.POST['new_value'])
-        print str(prev_value) + " " + str(new_value)
         if (request.POST['prev_op'] == '+'):
             context['prev_value'] = str(new_value + prev_value)
         elif (request.POST['prev_op'] == '-'):
@@ -65,7 +63,7 @@ def str_to_bool(s):
     elif s == 'False':
         return False
     else:
-        raise ValueError # evil ValueError that doesn't tell you what the wrong value was
+        raise ValueError
 
 def attrs_exist(request):
     return ('new_value' in request.POST and
@@ -73,6 +71,52 @@ def attrs_exist(request):
         'prev_op' in request.POST and
         'last_was_op' in request.POST and
         'display' in request.POST)
+
+def digit_press(request, context):
+    try:
+        digit = int(request.POST['digit'])
+        new_value = int(request.POST['new_value'])
+        context['prev_value'] = request.POST['prev_value']
+        new_value = new_value * 10 + digit
+        context['new_value'] = str(new_value)
+        context['display'] = str(new_value)
+        context['last_was_op'] = str(False)   
+        context['prev_op'] = request.POST['prev_op']         
+        return render(request, 'calculator/calculator.html', context)
+    except:
+        reset_context(context)
+        context['errors'] = "Invalid digit"
+        return render(request, 'calculator/calculator.html', context)
+
+def operator_press(request, context):
+    try:
+        if (str_to_bool(request.POST['last_was_op'])):
+            context['display'] = request.POST['display']
+            context['new_value'] = request.POST['new_value']
+            context['prev_value'] = request.POST['prev_value']
+            context['prev_op'] = request.POST['operator']
+            context['last_was_op'] = str(True)
+            return render(request, 'calculator/calculator.html', context)
+        else:
+            if (evaluate(request, context)):
+                res = context['prev_value']
+                context['display'] = context['prev_value']
+                context['prev_op'] = request.POST['operator']
+                context['new_value'] = str(0)
+                context['last_was_op'] = str(True)
+                if (request.POST['operator'] == '='):
+                    reset_context(context);
+                    context['display'] = res
+                    return render(request, 'calculator/calculator.html', context)
+                return render(request, 'calculator/calculator.html', context)                    
+            else:
+                reset_context(context)
+                context['errors']  = 'Invalid evaluation'                   
+                return render(request, 'calculator/calculator.html', context)
+    except:
+        reset_context(context)
+        context['errors']  = 'Invalid parameters'                           
+        return render(request, 'calculator/calculator.html', context)
 
 # Create your views here.
 def home_page(request):
@@ -86,54 +130,14 @@ def home_page(request):
 
     if not attrs_exist(request):
         reset_context(context)
-        context['errors'] = "Missing request parameters"
+        context['errors'] = "Fresh Calculator"
         return render(request, 'calculator/calculator.html', context)
 
     if 'digit' in request.POST:
-        digit = 0
-        try:
-            digit = int(request.POST['digit'])
-            new_value = int(request.POST['new_value'])
-            context['prev_value'] = request.POST['prev_value']
-            new_value = new_value * 10 + digit
-            context['new_value'] = str(new_value)
-            context['display'] = str(new_value)
-            context['last_was_op'] = str(False)   
-            context['prev_op'] = request.POST['prev_op']         
-            return render(request, 'calculator/calculator.html', context)
-        except:
-            reset_context(context)
-            context['errors'] = "Invalid digit"
-            return render(request, 'calculator/calculator.html', context)
+        return digit_press(request, context)
         
     if 'operator' in request.POST and is_valid_op(request.POST['operator']):
-        try:
-            if (str_to_bool(request.POST['last_was_op'])):
-                context['display'] = request.POST['display']
-                context['new_value'] = request.POST['new_value']
-                context['prev_value'] = request.POST['prev_value']
-                context['prev_op'] = request.POST['operator']
-                context['last_was_op'] = str(True)
-                return render(request, 'calculator/calculator.html', context)
-            else:
-                if (evaluate(request, context)):
-                    res = context['prev_value']
-                    context['display'] = context['prev_value']
-                    context['prev_op'] = request.POST['operator']
-                    context['new_value'] = str(0)
-                    context['last_was_op'] = str(True)
-                    if (request.POST['operator'] == '='):
-                        reset_context(context);
-                        context['display'] = res
-                        return render(request, 'calculator/calculator.html', context)
-                    return render(request, 'calculator/calculator.html', context)                    
-                else:
-                    reset_context(context)
-                    context['errors']  = 'Invalid evaluation'                   
-                    return render(request, 'calculator/calculator.html', context)
-        except:
-            reset_context(context)
-            return render(request, 'calculator/calculator.html', context)
+        return operator_press(request, context)
 
     reset_context(context)
     return render(request, 'calculator/calculator.html', context)
