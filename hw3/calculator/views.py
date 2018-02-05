@@ -45,14 +45,15 @@ def evaluate(request, context):
 
         prev_value = int(request.POST['prev_value'])
         new_value = int(request.POST['new_value'])
+        print str(prev_value) + " " + str(new_value)
         if (request.POST['prev_op'] == '+'):
             context['prev_value'] = str(new_value + prev_value)
         elif (request.POST['prev_op'] == '-'):
             context['prev_value'] = str(prev_value - new_value)
         elif (request.POST['prev_op'] == '*'):
             context['prev_value'] = str(prev_value * new_value)
-        elif (request.POST['prev_op'] == '/' and new_value != 0):
-            context['prev_value'] = str(Math.floor(prev_value / new_value))
+        elif (request.POST['prev_op'] == '/'):
+            context['prev_value'] = str(int(math.floor(prev_value / new_value)))
         else:
             reset_context(context)
             res = False
@@ -69,6 +70,13 @@ def str_to_bool(s):
     else:
         raise ValueError # evil ValueError that doesn't tell you what the wrong value was
 
+def attrs_exist(request):
+    return ('new_value' in request.POST and
+        'prev_value' in request.POST and
+        'prev_op' in request.POST and
+        'last_was_op' in request.POST and
+        'display' in request.POST)
+
 # Create your views here.
 def home_page(request):
     # render takes: (1) the request,
@@ -79,7 +87,7 @@ def home_page(request):
 
     context = {}
 
-    if 'reset' in request.POST:
+    if not attrs_exist(request):
         reset_context(context)
         return render(request, 'calculator/calculator.html', context)
     
@@ -102,7 +110,6 @@ def home_page(request):
     if 'operator' in request.POST and is_valid_op(request.POST['operator']):
         try:
             if (str_to_bool(request.POST['last_was_op'])):
-                print "last_was_op"
                 context['display'] = request.POST['display']
                 context['last_was_op'] = str(True)
                 context['new_value'] = request.POST['new_value']
@@ -110,11 +117,8 @@ def home_page(request):
                 context['prev_op'] = request.POST['operator']
                 return render(request, 'calculator/calculator.html', context)
             else:
-                print 'last was not op'
                 if (evaluate(request, context)):
-                    res = context['prev_value']
-                    print "evaluated" + res
-                    context['display'] = str(res)
+                    context['display'] = context['prev_value']
                     context['prev_op'] = request.POST['operator']
                     context['new_value'] = str(0)
                     context['last_was_op'] = str(True)
@@ -127,6 +131,7 @@ def home_page(request):
                     print "failed eval"
                     return render(request, 'calculator/calculator.html', context)
         except:
+            print context
             print "hit except"
             reset_context(context)
             return render(request, 'calculator/calculator.html', context)
