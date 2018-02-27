@@ -1,0 +1,38 @@
+body {
+    font: 20px "Montserrat", sans-serif;
+    line-height: 1.8;
+    color: #000000;
+}
+
+.profile {
+    max-width: 80px;
+}
+
+.user {
+    width: 300px;
+    height: 300px;
+    margin-bottom: 15px;
+}
+
+.bg-1 { 
+   background-color: #474e5d; /* Dark blue */
+    color: #ffffff;
+}
+
+.bg-2 {
+    background-color: #607D8B; /* Light grey */
+    color: #ffffff;
+}
+
+.bg-3 { 
+  background-color: #ffffff; /* White */
+  color: #555555;
+}
+
+.sidenav {
+    padding: 30px;
+}
+
+.container {
+    padding: 20px;
+}

@@ -1,0 +1,67 @@
+{% extends "socialnetwork/logged.html" %}
+{% block content %}
+  {% load static %}
+  
+  {% if post_form %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="jumbotron text-center">
+          <form method="POST" id="post_form" action="{% url 'home' %}">
+            <h1>What's on your mind?</h1>
+            {% for field in post_form.visible_fields %}
+              {{ field }}
+            {% endfor %}
+            <br>
+            <button type="submit" name="wall_post" value="wall_post" class="btn bg-2">Post</button>
+            {% csrf_token %}
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <div class="container">
+    {% for e in entries %}
+      <div class="row">
+        <section class="col-md-12">
+          <div class="card card-default">
+            <h4 class="card-header">
+            <blockquote class="blockquote mb-0">
+              <p>{{e.text}}</p>
+              <footer class="blockquote-footer text-right"><a href="{% url 'other' e.user_profile.id %}">{{ e.user_profile.user.username }} </a> on <cite title="Source Title">{{e.creation_time}}</cite></footer>
+            </blockquote>
+            </h4>
+            <div class="card-body">
+              <p class="small">{{e.comments|length}} comments
+                {% if e.comments|length > 0 %}
+                <button class="btn bg-2" type="button" data-toggle="collapse" data-target="#collapse_{{ e.id }}" aria-expanded="false" aria-controls="collapse_{{ e.id }}">Show comments</button></p>
+                
+                <div class="collapse" id="collapse_{{ e.id }}">
+                  {% for c in e.comments %}
+                    <div class="row">
+                      <div class="col-md-2"></div>
+                      <div class="col-md-10 social-comment">
+                        <a href="" class="pull-right">
+                          <img alt="image" src="{% static 'socialnetwork/img/user.png' %}">
+                        </a>
+                        <a href="{% url 'other' c.user_id %}">{{ c.username }} </a>{{c.text}}
+                        <small class="text-muted">{{c.time}}</small>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+            <form class="card-footer form-inline" id="comment_form" method="POST">
+              {% for field in form.visible_fields %}
+                {{ field }}
+              {% endfor %}
+              <button type="submit" name="comment" value="comment">Comment</button>
+              {% csrf_token %}
+            </form>
+          </div>
+        </section>
+      </div>
+      <br>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "socialnetwork/base.html" %}
+{% block user-info %}
+  <form action="{% url 'login' %}" method="get">
+    <button class="btn btn-secondary" type="submit">Login</button>
+  </form>
+{% endblock %}
+{% block content %}
+  <div class="container text-center">
+    <h3>Register for the Social Network</h3>
+    <div class="row">
+      <div class="col">
+      </div>
+      <div class="col-5">
+        {{ form.non_field_errors }}
+        
+        <form method="post" action="{% url 'register' %}">
+          <table class="table">
+            {% for field in form.visible_fields %}
+              <tr>
+                <td>{{ field.label }}</td>
+                <td>{{ field }}</td>
+              </tr>
+              {% for error in field.errors %}
+                <tr>{{field.errors}}</tr>
+              {% endfor %}
+            {% endfor %}
+          </table>
+          {% csrf_token %}
+          <button class="btn bg-2" type="submit">Register</button>
+        </form>
+
+      </div>
+      <div class="col">
+      </div>
+    </div>
+  </div>
+{% endblock %}

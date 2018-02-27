@@ -1,0 +1,19 @@
+{% extends "socialnetwork/base.html" %}
+{% block user-info %}
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.first_name}} {{user.last_name}}
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+      <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+    </div>
+  </li>
+{% endblock %}
+{% block nav-links %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'home' %}">Global</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'follower' %}">Follower</a>
+  </li>
+{% endblock %}
